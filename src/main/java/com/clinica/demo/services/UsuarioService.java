@@ -32,6 +32,10 @@ public class UsuarioService {
     public List<Usuario> listarTodos() {
 		return repoUsua.findAll();
 	}
+    
+    public Usuario obtenerPorId(int id) {
+    	return repoUsua.findById(id).orElse(null);
+    }
 
     public Usuario registrarUsuario(Usuario data) {
         if (data.getCorreo() == null || repoUsua.findByCorreo(data.getCorreo()).isPresent()) {

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +61,17 @@ public class UsuarioController {
 		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		    }
 	}
+	
+	@GetMapping("/{id}") 
+	public ResponseEntity<?> obtenerPorId(@PathVariable int id){
+		Usuario usaurio = servicio.obtenerPorId(id);
+		if (usaurio == null) {
+			return ResponseEntity.
+			status(HttpStatus.BAD_REQUEST).body("Usuario no existe"); 
+		} 
+		return ResponseEntity.ok(usaurio);	
+	}
+	
 	
 	
 }
