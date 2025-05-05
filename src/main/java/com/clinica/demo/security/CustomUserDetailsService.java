@@ -40,7 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService  {
 	        
 	        // Add "ROLE_" prefix here
 	        String roleWithPrefix = "ROLE_" + usuario.getRol_usua().toUpperCase();
-	        System.out.println("roleWithPrefix: " + roleWithPrefix);
+	        System.out.println("roleWithPrefix: " + role);
 
 
 	        return User.builder()

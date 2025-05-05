@@ -19,13 +19,17 @@ public class SecurityConfig {
 			//.requestMatchers(HttpMethod.POST, "/api/citas").hasRole("ADMIN")
 			
 			// endpoints sin restricción
+		    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 			.requestMatchers(HttpMethod.GET, "/api/citas").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
 			.requestMatchers(HttpMethod.POST, "/api/citas").permitAll()
-			.requestMatchers(HttpMethod.GET, "/api/usuarios").permitAll()
+			.requestMatchers(HttpMethod.GET, "/api/usuarios").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
 			.requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()
+			.requestMatchers(HttpMethod.POST, "/api/usuarios/login").permitAll()
 				
 			//.requestMatchers("/api/productos/**").hasRole("ADMIN") 
 			.anyRequest().authenticated())
+		.cors() // Enable CORS
+	    .and()
 		 .formLogin()
 		    .and()
 		 .logout().permitAll();

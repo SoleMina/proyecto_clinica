@@ -86,6 +86,23 @@ public class UsuarioService {
 
         return repoUsua.save(nuevoUsuario);
     }
+    
+    
+    public Usuario login(String correo, String password) {
+        Usuario currentUsuario = repoUsua.findByCorreo(correo).orElse(null);
+        
+        System.out.println("currentUsuario: " + currentUsuario);
+
+        if (currentUsuario == null) {
+            throw new RuntimeException("Correo o contraseña incorrecta");
+        }
+
+        if (!passwordEncoder.matches(password, currentUsuario.getPass_usua())) {
+            throw new RuntimeException("Correo o contraseña incorrecta");
+        }
+
+        return currentUsuario;
+    }
 
 
 

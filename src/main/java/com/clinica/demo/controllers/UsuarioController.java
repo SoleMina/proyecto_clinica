@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clinica.demo.dtos.LoginRequest;
 import com.clinica.demo.models.Usuario;
 import com.clinica.demo.services.UsuarioService;
 
@@ -71,6 +72,24 @@ public class UsuarioController {
 		} 
 		return ResponseEntity.ok(usaurio);	
 	}
+	
+	
+	 @PostMapping("/login")
+	 public ResponseEntity<Usuario> login(@RequestBody LoginRequest payload) {
+		 
+		 
+		 System.out.println("Ingrasando login: ");
+	        
+	        try {
+	        	 Usuario usuario = servicio.login(payload.getCorreo(), payload.getPassword());
+	        	 System.out.println("usuario login: " + usuario);
+	        	 return ResponseEntity.ok(usuario);
+				
+			} catch (Exception e) {
+				System.out.println("Error en logueo: " + e);
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+	  }
 	
 	
 	
