@@ -22,6 +22,8 @@ public class SecurityConfig {
 		    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 			.requestMatchers(HttpMethod.GET, "/api/citas").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
 			.requestMatchers(HttpMethod.POST, "/api/citas").permitAll()
+			.requestMatchers(HttpMethod.GET, "/api/especialidades").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
+			.requestMatchers(HttpMethod.POST, "/api/especialidades").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
 			.requestMatchers(HttpMethod.GET, "/api/usuarios").hasAnyRole("ADMINISTRADOR", "MEDICO", "PACIENTE")
 			.requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()
 			.requestMatchers(HttpMethod.POST, "/api/usuarios/login").permitAll()
