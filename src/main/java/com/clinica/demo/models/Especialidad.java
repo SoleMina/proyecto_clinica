@@ -13,7 +13,7 @@ import lombok.Data;
 public class Especialidad {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_espe;
+	private Integer id_espe;
 	
 	private String nom_espe;
 	

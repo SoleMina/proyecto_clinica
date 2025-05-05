@@ -5,12 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.clinica.demo.dtos.MedicoRegisterDTO;
-import com.clinica.demo.dtos.UsuarioRegisterDTO;
 import com.clinica.demo.models.Administrador;
+import com.clinica.demo.models.Especialidad;
 import com.clinica.demo.models.Medico;
-import com.clinica.demo.models.Paciente;
 import com.clinica.demo.models.Usuario;
 import com.clinica.demo.repositories.IEspecialidadRepository;
 import com.clinica.demo.repositories.IUsuarioRepository;
@@ -18,7 +15,7 @@ import com.clinica.demo.repositories.IUsuarioRepository;
 @Service
 public class UsuarioService {
 
-    private final IEspecialidadRepository IEspecialidadRepository;
+    private final IEspecialidadRepository iEspecialidadRepository;
 	
 	@Autowired
 	private IUsuarioRepository repoUsua;
@@ -28,89 +25,66 @@ public class UsuarioService {
 	 @Autowired
 	 private IEspecialidadRepository repoEspe;
 
-    UsuarioService(IEspecialidadRepository IEspecialidadRepository) {
-        this.IEspecialidadRepository = IEspecialidadRepository;
+    UsuarioService(IEspecialidadRepository iEspecialidadRepository) {
+        this.iEspecialidadRepository = iEspecialidadRepository;
     }
-    
-    
+   
     public List<Usuario> listarTodos() {
 		return repoUsua.findAll();
 	}
 
-	/*
-	 * public Usuario registrarUsuario(Usuario usuario) { // codifica la contraseña
-	 * antes de guardarla String claveCodificada =
-	 * passwordEncoder.encode(usuario.getPass_usua());
-	 * usuario.setPass_usua(claveCodificada); return repoUsua.save(usuario); }
-	 */
-	
-	
-    private Usuario registrarUsuario(Usuario usuario) {
-    	if (usuario.getRol_usua() == null) {
-            usuario.setRol_usua("PACIENTE");
+    public Usuario registrarUsuario(Usuario data) {
+        if (data.getCorreo() == null || repoUsua.findByCorreo(data.getCorreo()).isPresent()) {
+            throw new IllegalArgumentException("Correo ya registrado o inválido.");
         }
-        String claveCodificada = passwordEncoder.encode(usuario.getPass_usua());
-        usuario.setPass_usua(claveCodificada);
-        return repoUsua.save(usuario);
-    }
 
-    public Usuario registrarUsuario(UsuarioRegisterDTO dto) {
-        String rol = dto.getRol_usua().toUpperCase();
-        
-        System.out.println("DTO rol: " + rol);
+        Usuario nuevoUsuario;
 
-        switch (rol) {
-            case "PACIENTE":
-                return registrarPaciente(dto);
-            case "ADMINISTRADOR":
-                return registrarAdministrador(dto);
-            case "MEDICO":
-                if (dto instanceof MedicoRegisterDTO) {
-                    return registrarMedico((MedicoRegisterDTO) dto);
-                } else {
-                    throw new IllegalArgumentException("MedicoRegisterDTO expected for MEDICO role");
-                }
-            default:
-                throw new IllegalArgumentException("Invalid role: " + rol);
+        if ("MEDICO".equalsIgnoreCase(data.getRol_usua())) {
+            Medico medico = new Medico();
+            medico.setNom_usua(data.getNom_usua());
+            medico.setFono_usua(data.getFono_usua());
+            medico.setCorreo(data.getCorreo());
+            medico.setFna_usua(data.getFna_usua());
+            medico.setRol_usua("MEDICO");
+            
+            if (data.getId_espe() != null) {
+                Especialidad especialidad = repoEspe.findById(data.getId_espe())
+                        .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada"));
+                
+                medico.setEspecialidad(especialidad);
+                medico.setId_espe(data.getId_espe());
+            } else {
+                throw new IllegalArgumentException("Para registrar un médico se requiere una especialidad");
+            }
+            
+            nuevoUsuario = medico;
+        } else if ("ADMINISTRADOR".equalsIgnoreCase(data.getRol_usua())) {
+            Administrador admin = new Administrador();
+            admin.setNom_usua(data.getNom_usua());
+            admin.setFono_usua(data.getFono_usua());
+            admin.setCorreo(data.getCorreo());
+            admin.setFna_usua(data.getFna_usua());
+            admin.setRol_usua("ADMINISTRADOR");
+            nuevoUsuario = admin;
+        } else {
+            Usuario paciente = new Usuario();
+            paciente.setNom_usua(data.getNom_usua());
+            paciente.setFono_usua(data.getFono_usua());
+            paciente.setCorreo(data.getCorreo());
+            paciente.setFna_usua(data.getFna_usua());
+            paciente.setRol_usua("PACIENTE");
+            nuevoUsuario = paciente;
         }
+
+        String claveCodificada = passwordEncoder.encode(data.getPass_usua());
+        nuevoUsuario.setPass_usua(claveCodificada);
+
+        return repoUsua.save(nuevoUsuario);
     }
 
-    private Usuario registrarPaciente(UsuarioRegisterDTO dto) {
-        Usuario paciente = new Paciente();
-        paciente.setNom_usua(dto.getNom_usua());
-        paciente.setCorreo(dto.getEmail_usua());
-        paciente.setPass_usua(dto.getPass_usua());
-        paciente.setFono_usua(dto.getFono_usua());
-        paciente.setFna_usua(dto.getFna_usua());
-        paciente.setRol_usua("PACIENTE");
 
-        return registrarUsuario(paciente);
-    }
 
-    private Usuario registrarAdministrador(UsuarioRegisterDTO dto) {
-        Usuario admin = new Administrador();
-        admin.setNom_usua(dto.getNom_usua());
-        admin.setCorreo(dto.getEmail_usua());
-        admin.setPass_usua(dto.getPass_usua());
-        admin.setFono_usua(dto.getFono_usua());
-        admin.setFna_usua(dto.getFna_usua());
-        admin.setRol_usua("ADMINISTRADOR");
 
-        return registrarUsuario(admin);
-    }
 
-    private Usuario registrarMedico(MedicoRegisterDTO dto) {
-        Medico medico = new Medico();
-        medico.setNom_usua(dto.getNom_usua());
-        medico.setCorreo(dto.getEmail_usua());
-        medico.setPass_usua(dto.getPass_usua());
-        medico.setFono_usua(dto.getFono_usua());
-        medico.setFna_usua(dto.getFna_usua());
-        medico.setRol_usua("MEDICO");
-        medico.setId_espe(dto.getId_espe());
-
-        repoEspe.findById(dto.getId_espe()).ifPresent(medico::setEspecialidad);
-
-        return registrarUsuario(medico);
-    }
 }

@@ -18,6 +18,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -50,6 +51,9 @@ public class Usuario {
 	
 	@UpdateTimestamp
     private LocalDateTime updatedAt;
+	
+	@Transient
+	private Integer id_espe;
 	
 	public Usuario() {
 		
@@ -141,6 +145,13 @@ public class Usuario {
 		this.updatedAt = updatedAt;
 	}
 
+	public Integer getId_espe() {
+		return id_espe;
+	}
+
+	public void setId_espe(Integer id_espe) {
+		this.id_espe = id_espe;
+	}
 	
 	
 	

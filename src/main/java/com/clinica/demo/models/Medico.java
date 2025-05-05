@@ -1,5 +1,6 @@
 package com.clinica.demo.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,39 +10,39 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @DiscriminatorValue("MEDICO")
 public class Medico extends Usuario {
-	
-	 private int id_espe;
-	
-	 @ManyToOne( fetch = FetchType.LAZY)
-	 @JoinColumn(name="id_espe", insertable= false, updatable = false)
-	 private Especialidad especialidad;
 	 
-	 public Medico() {
-		 
-	 }
+	    @Column(name = "id_espe", insertable = true, updatable = true)
+	    private Integer id_espe;
 
-	public Medico(int id_espe, Especialidad especialidad) {
-		super();
-		this.id_espe = id_espe;
-		this.especialidad = especialidad;
-	}
+	    @ManyToOne
+	    @JoinColumn(name = "id_espe", insertable = false, updatable = false)
+	    private Especialidad especialidad;
 
-	public int getId_espe() {
-		return id_espe;
-	}
+	    public Medico() {}
 
-	public void setId_espe(int id_espe) {
-		this.id_espe = id_espe;
-	}
+	    public Medico(int id_espe, Especialidad especialidad) {
+	        this.id_espe = id_espe;
+	        this.especialidad = especialidad;
+	    }
 
-	public Especialidad getEspecialidad() {
-		return especialidad;
-	}
+	    public Especialidad getEspecialidad() {
+	        return especialidad;
+	    }
 
-	public void setEspecialidad(Especialidad especialidad) {
-		this.especialidad = especialidad;
-	}
-	 
+	    public void setEspecialidad(Especialidad especialidad) {
+	        this.especialidad = especialidad;
+	        if (especialidad != null) {
+	            this.id_espe = especialidad.getId_espe();
+	        }
+	    }
+
+	    public Integer getId_espe() {
+	        return id_espe;
+	    }
+
+	    public void setId_espe(Integer id_espe) {
+	        this.id_espe = id_espe;
+	    }
 	 
 
 }
