@@ -19,7 +19,7 @@ import com.clinica.demo.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "http://localhost:55705")
+@CrossOrigin(origins = "http://localhost:54001")
 public class UsuarioController {
 
 	@Autowired

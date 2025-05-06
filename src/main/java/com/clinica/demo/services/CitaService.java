@@ -25,4 +25,12 @@ public class CitaService {
 	public Cita agregarCita(Cita cita) {
 		return repoCita.save(cita);
 	}
+	
+	public Cita obtenerPorId(int id) {
+		return repoCita.findById(id).orElse(null);
+	}
+	
+	public void eliminarPorId(int id) {
+		repoCita.deleteById(id);
+	}
 }

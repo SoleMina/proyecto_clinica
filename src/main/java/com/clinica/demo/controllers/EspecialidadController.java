@@ -21,7 +21,7 @@ import com.clinica.demo.services.EspecialidadService;
 
 @RestController
 @RequestMapping("/api/especialidad")
-@CrossOrigin(origins = "http://localhost:55705")
+@CrossOrigin(origins = "http://localhost:54001")
 public class EspecialidadController {
 	
 	@Autowired
@@ -61,8 +61,6 @@ public class EspecialidadController {
 	public ResponseEntity<?> eliminarPorId(@PathVariable int id){
 		System.out.println("Inside eliminar especialidad");
 		Especialidad especialidad = servicio.obtenerPorId(id);
-		
-		System.out.println("Especialidad: " + especialidad.getId_espe());
 		
 		if (especialidad == null) {
 			return ResponseEntity.
