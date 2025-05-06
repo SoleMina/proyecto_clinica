@@ -17,7 +17,7 @@ import com.clinica.demo.services.CitaService;
 
 @RestController
 @RequestMapping("/api/citas")
-@CrossOrigin(origins = "http://localhost:63252")
+@CrossOrigin(origins = "http://localhost:55705")
 public class CitaController {
 
 	@Autowired
