@@ -21,4 +21,16 @@ public class EspecialidadService {
 	public Especialidad agregarEspecialidad(Especialidad especialidad) {
 		return repoEspe.save(especialidad);
 	}
+	
+	public Especialidad obtenerPorId(int id) {
+		return repoEspe.findById(id).orElse(null);
+	}
+	
+	public void eliminarPorId(int id) {
+		repoEspe.deleteById(id);
+	}
+	
+	public Especialidad actualizarEspecialidad(Especialidad especilidad) {
+		return repoEspe.save(especilidad);
+	}
 }
