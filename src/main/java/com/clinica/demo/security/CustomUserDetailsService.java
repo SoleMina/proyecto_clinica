@@ -21,12 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService  {
 	    @Autowired
 	    private IUsuarioRepository repoUsua;
 
-      CustomUserDetailsService(PasswordEncoder passwordEncoder) {
-    	
-        this.passwordEncoder = passwordEncoder;
-    }
-
-	   
 	    
 	    @Override
 	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,11 +28,12 @@ public class CustomUserDetailsService implements UserDetailsService  {
 	            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 	        System.out.println("usuario recibido desde BD: " + usuario);
 	        System.out.println("usuario recibido desde BD: " + usuario.getCorreo());
+	        
+	        
 	        // Agrega prefijo ROLE_ manualmente
 	        String role = usuario.getRol_usua().toUpperCase();
 	        System.out.println("Rol recibido desde BD: " + role);
 	        
-	        // Add "ROLE_" prefix here
 	        String roleWithPrefix = "ROLE_" + usuario.getRol_usua().toUpperCase();
 	        System.out.println("roleWithPrefix: " + role);
 

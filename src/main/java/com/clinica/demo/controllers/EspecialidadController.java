@@ -21,7 +21,7 @@ import com.clinica.demo.services.EspecialidadService;
 
 @RestController
 @RequestMapping("/api/especialidad")
-@CrossOrigin(origins = "http://localhost:54001")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EspecialidadController {
 	
 	@Autowired

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ import com.clinica.demo.services.CitaService;
 
 @RestController
 @RequestMapping("/api/citas")
-@CrossOrigin(origins = "http://localhost:54001")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CitaController {
 
 	@Autowired
@@ -77,5 +78,28 @@ public class CitaController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
 				body("Error al eliminar: " + e);
 		}
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> actualizarCita(@PathVariable int id, @RequestBody Cita citaActualizada) {
+	    Cita citaExistente = servicio.obtenerPorId(id);
+	    
+	    System.out.println("Inside putting controller cita");
+
+	    if (citaExistente == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cita no encontrada");
+	    }
+
+	    try {
+	    	citaExistente.setId_med(citaActualizada.getId_med());
+	    	citaExistente.setFecha_cita(citaActualizada.getFecha_cita());
+	    	citaExistente.setHora_cita(citaActualizada.getHora_cita());
+	    	citaExistente.setEstado_cita(citaActualizada.getEstado_cita());
+	        
+	        Cita actualizada = servicio.agregarCita(citaExistente);
+	        return ResponseEntity.ok(actualizada);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar: " + e.getMessage());
+	    }
 	}
 }

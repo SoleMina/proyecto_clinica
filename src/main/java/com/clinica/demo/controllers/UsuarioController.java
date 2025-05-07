@@ -19,19 +19,12 @@ import com.clinica.demo.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "http://localhost:54001")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
 
 	@Autowired
 	private UsuarioService servicio;
 	
-	/*
-	 * @PostMapping("/registrar") public ResponseEntity<Usuario>
-	 * registrarUsuario(@RequestBody Usuario usuario){ try { Usuario nuevo =
-	 * servicio.registrarUsuario(usuario); return
-	 * ResponseEntity.status(HttpStatus.CREATED).body(nuevo); } catch (Exception e)
-	 * { return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); } }
-	 */
 	
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(@RequestBody Usuario data) {
