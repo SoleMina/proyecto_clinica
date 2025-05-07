@@ -103,6 +103,10 @@ public class UsuarioService {
 
         return currentUsuario;
     }
+    
+    public void eliminarPorId(int id) {
+    	repoUsua.deleteById(id);
+	}
 
 
 

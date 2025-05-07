@@ -27,11 +27,6 @@ public class CitaController {
 	@Autowired
 	private CitaService servicio;
 	
-	@GetMapping("/hello")
-	public String getHello() {
-		return "helloo";
-	}
-	
 	@GetMapping
 	public ResponseEntity<List<Cita>> listarTodos(){
 		 System.out.println("Entrando a listarTodos");
